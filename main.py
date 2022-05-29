@@ -30,7 +30,8 @@ class Back_to_the_instance():
     #Names of log files is like output_log_15-24-16.txt
     def get_latest_log(self):
         self.list_of_files =glob(self.logpath+'*.txt')
-        self.latest_file = max(self.list_of_files, key=os.path.getctime)#Get the lates created log file 
+        # self.latest_file = max(self.list_of_files, key=os.path.getctime)#Get the lates created log file 
+        self.latest_file = self.logpath+"output_log_11-09-11.txt"#Get the lates created log file 
 
     def launch_game(self):
         id="vrchat://launch?id="+self.id_list[self.id_choice]
@@ -38,7 +39,3 @@ class Back_to_the_instance():
 
 if __name__=="__main__":
     Back_to_the_instance(launch=True)
-    # wrld,instance=get_world()
-    # path="C:\\Program Files (x86)\\Steam\\steamapps\\common\\VRChat\\launch.exe"
-    # id="vrchat://launch?id="+wrld+":"+instance
-    # subprocess.run([path,id],shell=True)
