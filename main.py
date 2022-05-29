@@ -21,31 +21,31 @@ class Back_to_the_instance():
         self.id_list=[]
         self.name_list=[]
         self.time_list=[]
-        count=0
+        self.count=0
         for file in self.latest_file:
             with open(file,"r",encoding="UTF") as f:
                 sentences=f.read()
                 self.get_id_list(sentences)
                 self.get_name_list(sentences)
                 self.get_time_list(sentences)
-            count+=1
-            if count>30:
+            self.count+=1
+            if self.count>30:
                 break
 
     def get_id_list(self,sentences):
         m=re.finditer('Joining w.*\n',sentences)#Find worlds' and instances' id in a log fille
-        temp=list(m)
+        temp=list(reversed(list(m)))
         temp=list(map(lambda x:x.group().strip("Joining ").strip("\n"),temp))
         self.id_list+=temp
     
     def get_name_list(self,sentences):
         m=re.finditer('Entering Room.*\n',sentences)#Find worlds' names in a log fille
-        temp=list(m)
+        temp=list(reversed(list(m)))
         temp=list(map(lambda x:x.group().strip("Entering Room:").strip("\n"),temp))
         self.name_list+=temp
     def get_time_list(self,sentences):
         m=re.finditer('.*Entering Room',sentences)#Find worlds' names in a log fille
-        temp=list(m)
+        temp=list(reversed(list(m)))
         temp=list(map(lambda x:str(x.group())[10:16],temp))
         self.time_list+=temp
 
@@ -64,3 +64,4 @@ class Back_to_the_instance():
 
 if __name__=="__main__":
     Back_to_the_instance(launch=True)
+    print()
