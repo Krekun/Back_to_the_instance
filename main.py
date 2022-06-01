@@ -6,8 +6,8 @@ import subprocess
 
 class Back_to_the_instance():
     def __init__(self,launch=False):
-         self.path="C:\\Program Files (x86)\\Steam\\steamapps\\common\\VRChat\\launch.exe"
-         self.vrchat_logfolder="\AppData\LocalLow\VRChat\VRChat\\"
+         self.path="C:\\Program Files (x86)\\Steam\\steamapps\\common\\VRChat\\launch.exe"#default path to VR chat launcher
+         self.vrchat_logfolder="\AppData\LocalLow\VRChat\VRChat\\"    #Log files of VRC is stored in \AppData\LocalLow\VRChat\VRChat
          self.userpath=os.environ['USERPROFILE']
          self.logpath=self.userpath+self.vrchat_logfolder#Logfiles of VRC is located here
          self.get_latest_log()
@@ -18,45 +18,36 @@ class Back_to_the_instance():
 
     #Get world id and instance in a log file
     def get_world(self):
-        self.id_list=[]
+        self.id_list=[]#initilaze lists
         self.name_list=[]
         self.time_list=[]
         self.count=0
         for file in self.latest_file:
             with open(file,"r",encoding="UTF") as f:
                 sentences=f.read()
-                self.get_id_list(sentences)
-                self.get_name_list(sentences)
-                self.get_time_list(sentences)
+                self.get_lists(sentences,0)#0:instance id ,1:instance name 2:joined time
+                self.get_lists(sentences,1)
+                self.get_lists(sentences,2)
             self.count+=1
             if self.count>30:
                 break
 
-    def get_id_list(self,sentences):
-        m=re.finditer('Joining w.*\n',sentences)#Find worlds' and instances' id in a log fille
-        temp=list(reversed(list(m)))
-        temp=list(map(lambda x:x.group().strip("Joining ").strip("\n"),temp))
-        self.id_list+=temp
-    
-    def get_name_list(self,sentences):
-        m=re.finditer('Entering Room.*\n',sentences)#Find worlds' names in a log fille
-        temp=list(reversed(list(m)))
-        temp=list(map(lambda x:x.group().strip("Entering Room:").strip("\n"),temp))
-        self.name_list+=temp
-    def get_time_list(self,sentences):
-        m=re.finditer('.*Entering Room',sentences)#Find worlds' names in a log fille
-        temp=list(reversed(list(m)))
-        temp=list(map(lambda x:str(x.group())[10:16],temp))
-        self.time_list+=temp
+    def get_lists(self,sentences,format_type):
+        text_list=("Joining w.*\n",'Entering Room.*\n','.*Entering Room')
+        m=re.finditer(text_list[format_type],sentences)#Find worlds' and instances' id in a log fille
+        temp_list=list(reversed(list(m)))
+        if format_type==0:
+            self.id_list+=list(map(lambda x:x.group().removeprefix("Joining ").strip("\n"),temp_list))
+        elif format_type==1:
+            self.name_list+=list(map(lambda x:x.group().removeprefix("Entering Room:").strip("\n"),temp_list))
+        elif format_type==2:
+            self.time_list+=list(map(lambda x:str(x.group())[10:16],temp_list))
 
     #Get the latest log file of VRC
-    #Log files of VRC is stored in \AppData\LocalLow\VRChat\VRChat
-    #Names of log files is like output_log_15-24-16.txt
+    #Names of log files are like output_log_15-24-16.txt
     def get_latest_log(self):
         self.list_of_files =glob(self.logpath+'*.txt')
-        # self.latest_file = max(self.list_of_files, key=os.path.getctime)#Get the lates created log file 
-        self.latest_file = sorted(self.list_of_files, key=os.path.getctime, reverse=True)#Get the lates created log file 
-        # self.latest_file = [self.logpath+"output_log_11-09-11.txt"]#Get the lates created log file 
+        self.latest_file = sorted(self.list_of_files, key=os.path.getctime, reverse=True)#Get the log files 
 
     def launch_game(self):
         id="vrchat://launch?id="+self.id_list[self.id_choice]
