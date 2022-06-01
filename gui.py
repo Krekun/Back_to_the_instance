@@ -13,8 +13,7 @@ class ListBoxApp(Back_to_the_instance):
     def __init__(self, bti: Back_to_the_instance=Back_to_the_instance()):
         self.root=tk.Tk()
         self.root.title('ワールドの選択')
-        # self.root.iconphoto=(False,tk.PhotoImage(file="VRC2.ico"))
-        self.root.iconbitmap(self.find_data_file("VRC.ico"))
+        # self.root.iconbitmap(self.find_data_file("VRC.ico"))
         self.master=tk.Frame(self.root, width=440, height=200)
         # タイトルの表示
         self.name_list=bti.name_list
