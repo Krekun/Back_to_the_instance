@@ -8,12 +8,14 @@ from invite import *
 import os,sys
 
 # アプリの定義
-class ListBoxApp(tk.Frame,Back_to_the_instance):
+class ListBoxApp():
     # 初期化
-    def __init__(self, master=None,bti: Back_to_the_instance=Back_to_the_instance()):
-        tk.Frame.__init__(self, master, width=440, height=200)
+    def __init__(self, bti: Back_to_the_instance=Back_to_the_instance()):
+        self.root=tk.Tk()
+        self.root.title('ワールドの選択')
+        self.root.iconbitmap=(r"C:\Users\baryo\Documents\Vrchat\Back_to_the_instance\VRC.ico")
+        self.master=tk.Frame(self.root, width=440, height=200)
         # タイトルの表示
-        self.master.title('ワールドの選択')
         # リストボックス
         self.name_list=bti.name_list
         self.id_list=bti.id_list
@@ -21,16 +23,20 @@ class ListBoxApp(tk.Frame,Back_to_the_instance):
         self.path=bti.path
         self.path_to_id=self.find_data_file("id.json")
         self.result=[t1+" "+t2 for t1,t2 in zip(self.time_list,self.name_list)]
-        self.list_box = tk.Listbox(self, listvariable=tk.StringVar(value=self.result), selectmode='browse',font=150)
+        self.id_choice=0
+        self.create_widgets()
+        self.master.pack()
+
+    def create_widgets(self):
+        self.list_box = tk.Listbox(self.root, listvariable=tk.StringVar(value=self.result), selectmode='browse',font=150)
         self.list_box.bind('<<ListboxSelect>>', lambda e: self.on_select_box())
         self.list_box.place(x=10, y=10, width=250, height=200)
-        self.button1 =tk.Button(self,text=u'Run',command=self.on_select_button1,font=("",25))
+        self.button1 =tk.Button(self.root,text=u'Run',command=self.on_select_button1,font=("",25))
         self.button1.place(x=300, y=30, width=120, height=60)
-        self.button2 =tk.Button(self,text=u'Self invite',command=self.on_select_button2,font=("",20))
+        self.button2 =tk.Button(self.root,text=u'Self invite',command=self.on_select_button2,font=("",20))
         self.button2.place(x=300, y=110, width=120, height=60)
-        self.id_choice=0
-        #toolbox
-    
+
+
     def find_data_file(self,filename):
         if getattr(sys, "frozen", False):
             # The application is frozen
@@ -66,14 +72,8 @@ class ListBoxApp(tk.Frame,Back_to_the_instance):
                 if result==False:                
                     self.make_id_file()
             # self.master.destroy()
-
             
 # アプリの実行
-
-
-
 if __name__=="__main__":
-    app = ListBoxApp()
-    app.pack()
-
-    app.mainloop()  
+    app=ListBoxApp()
+    app.root.mainloop()  
