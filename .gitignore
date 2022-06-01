@@ -3,5 +3,7 @@
 *.txt
 *.json
 *.pyc
-
+*.png
+build/
+dist/
 gomi/

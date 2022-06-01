@@ -37,11 +37,11 @@ class Back_to_the_instance():
         m=re.finditer(text_list[format_type],sentences)#Find worlds' and instances' id in a log fille
         temp_list=list(reversed(list(m)))
         if format_type==0:
-            self.id_list+=list(map(lambda x:x.group().removeprefix("Joining ").strip("\n"),temp_list))
+            self.id_list+=list(map(lambda x:x.group().removeprefix("Joining ").strip("\n"),temp_list))#Process the sentencet to an instance id
         elif format_type==1:
-            self.name_list+=list(map(lambda x:x.group().removeprefix("Entering Room:").strip("\n"),temp_list))
+            self.name_list+=list(map(lambda x:x.group().removeprefix("Entering Room:").strip("\n"),temp_list))#Process the sentencet to the world name
         elif format_type==2:
-            self.time_list+=list(map(lambda x:str(x.group())[10:16],temp_list))
+            self.time_list+=list(map(lambda x:str(x.group())[10:16],temp_list))#Process the sentencet to the joinning time
 
     #Get the latest log file of VRC
     #Names of log files are like output_log_15-24-16.txt

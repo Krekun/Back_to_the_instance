@@ -8,15 +8,15 @@ from invite import *
 import os,sys
 
 # アプリの定義
-class ListBoxApp():
+class ListBoxApp(Back_to_the_instance):
     # 初期化
     def __init__(self, bti: Back_to_the_instance=Back_to_the_instance()):
         self.root=tk.Tk()
         self.root.title('ワールドの選択')
-        self.root.iconbitmap=(r"C:\Users\baryo\Documents\Vrchat\Back_to_the_instance\VRC.ico")
+        # self.root.iconphoto=(False,tk.PhotoImage(file="VRC2.ico"))
+        self.root.iconbitmap(self.find_data_file("VRC.ico"))
         self.master=tk.Frame(self.root, width=440, height=200)
         # タイトルの表示
-        # リストボックス
         self.name_list=bti.name_list
         self.id_list=bti.id_list
         self.time_list=bti.time_list
@@ -35,7 +35,6 @@ class ListBoxApp():
         self.button1.place(x=300, y=30, width=120, height=60)
         self.button2 =tk.Button(self.root,text=u'Self invite',command=self.on_select_button2,font=("",20))
         self.button2.place(x=300, y=110, width=120, height=60)
-
 
     def find_data_file(self,filename):
         if getattr(sys, "frozen", False):
@@ -58,7 +57,6 @@ class ListBoxApp():
                 f.write('{\n"username":"",\n"password":""\n}')
             subprocess.run(["notepad.exe",self.path_to_id],shell=True)
 
-
     def on_select_button2(self):
             id=self.id_list[self.id_choice]
             invite=Invite(id,self.path_to_id)
@@ -68,7 +66,7 @@ class ListBoxApp():
                     # print(find_data_file("id.json"))
                     self.make_id_file()
             else:
-                result=invite.Send_invite()
+                result=invite.send_invite()
                 if result==False:                
                     self.make_id_file()
             # self.master.destroy()
